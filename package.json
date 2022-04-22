@@ -1,0 +1,10 @@
+{
+    "name": "scuffed-rooms",
+    "version": "0.0.1",
+    "description": "A easy-to-use library that is used to quickly create multiplayer games with a 'room-based' system.",
+    "author": "Two",
+    "main": "src/func/index.js",
+    "dependencies": {
+        "uWebSockets.js": "uNetworking/uWebSockets.js#v20.3.0"
+    }
+}
