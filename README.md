@@ -22,14 +22,6 @@ require("scuffed-rooms")(PORT, {
     minUsernameLength: 3,
     maxUsernameLength: 13,
     
-    // Start up custom function.
-    onStart: null,
-    /*
-    onStart: (port, listenSocket) => { // Don't touch "listenSocket" unless you know what you're doing.
-        console.log(port);
-    },
-    */
-    
     // The maximum players allowed in a room.
     maxPlayers: 10,
 
@@ -77,7 +69,15 @@ require("scuffed-rooms")(PORT, {
         maxBackpressure: 1024,
         maxPayloadLength: 512
     },
-
+    
+    // Start up custom function.
+    onStart: null,
+    /*
+    onStart: (port, listenSocket) => { // Don't touch "listenSocket" unless you know what you're doing.
+        console.log(port);
+    },
+    */
+    
     // Username settings.
     minUsernameLength: 3, // default: 1
     maxUsernameLength: 13, // default: 32
