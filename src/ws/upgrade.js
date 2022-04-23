@@ -2,6 +2,7 @@ const {
     minUsernameLength = 1,
     maxUsernameLength = 32,
     customUsernameChecking,
+    maxRooms = 100,
     maxPlayers = 100,
     disableUsernameDupes,
     saveIPs,
@@ -48,6 +49,8 @@ module.exports = async (res, req, context) => {
 
         room.players.push({ connected });
     } else {
+        if (Object.entries(rooms).length >= maxRooms) return end();
+
         for (let i = 0; i < 5; i++) {
             room_id = generateID();
             if (!rooms[room_id]) break;
@@ -56,6 +59,8 @@ module.exports = async (res, req, context) => {
         }
 
         room = {
+            aborted: false,
+            
             id: room_id,
             players: [{ connected }],
             getPlayer: id => room.players.filter(p => p.id == id)[0]

@@ -51,8 +51,8 @@ require("scuffed-rooms")(PORT, {
     },
 
     // Unexpected room deletion. (room deletions not handled by onDisconnect() for some reason.)
-    unexpectedRoomDeletion: room => {
-        console.log(room);
+    unexpectedRoomDeletion: (error, room) => {
+        console.log(error);
     }
 });
 ```
@@ -108,7 +108,9 @@ require("scuffed-rooms")(PORT, {
     */
     disableUsernameDupes: true,
     
-    // The maximum players allowed in a room.
+    // The maximum rooms there can be, and the maximum players are allowed in a room.
+    // Keep in mind a single IP address can only handle 65,536 sockets.
+    maxRooms: 100, // default: 100
     maxPlayers: 10, // default: 100
 
     // The template becomes set to ws.data.
@@ -143,8 +145,8 @@ require("scuffed-rooms")(PORT, {
     },
 
     // Unexpected room deletion. (room deletions not handled by onDisconnect() for some reason.)
-    unexpectedRoomDeletion: room => {
-        console.log(room);
+    unexpectedRoomDeletion: (error, room) => {
+        console.log(error);
     }
 });
 ```

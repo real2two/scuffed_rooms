@@ -1,10 +1,21 @@
-const { maxPlayers, unexpectedRoomDeletion } = require("./tools");
+const { maxRooms, maxPlayers, unexpectedRoomDeletion } = require("./tools");
 
 setInterval(() => {
+    if (Object.entries(module.exports).length >= maxRooms) {
+        for (const [ , room ] of Object.entries(module.exports).slice(maxRooms)) {
+            delete module.exports[room.id];
+
+            if (typeof unexpectedRoomDeletion === "function") unexpectedRoomDeletion("exceeds_rooms", room);
+
+            room.aborted = true;
+            for (const player of room.players) player.close();
+        }
+    }
+
     for (const [ , room ] of Object.entries(module.exports)) {
         if (room.players.length === 0) {
             delete module.exports[room.id];
-            if (typeof unexpectedRoomDeletion === "function") unexpectedRoomDeletion(room);
+            if (typeof unexpectedRoomDeletion === "function") unexpectedRoomDeletion("no_players", room);
             
             continue;
         }
