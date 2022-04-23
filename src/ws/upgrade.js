@@ -1,4 +1,4 @@
-const { minUsernameLength, maxUsernameLength, customUsernameChecking, maxPlayers, disableUsernameDupes, template } = require("../func/tools");
+const { minUsernameLength, maxUsernameLength, customUsernameChecking, maxPlayers, disableUsernameDupes, saveIPs, ipHeader, disableDupeIPs, customIPChecking, template } = require("../func/tools");
 const rooms = require("../func/rooms");
 
 const generateID = () => Math.random().toString().slice(-8);
@@ -51,11 +51,35 @@ module.exports = async (res, req, context) => {
         rooms[room_id] = room;
     }
 
+    let ip;
+    
+    if (saveIPs != false) {
+        ip = (
+            ipHeader ?
+            req.getHeader(ipHeader) :
+            undefined
+        ) || new TextDecoder().decode(res.getRemoteAddressAsText());
+
+        if (disableDupeIPs === true) {
+            for (const [ , { players } ] of Object.entries(rooms)) {
+                for (const player of players) {
+                    if (player.ip == ip) return end();
+                }
+            }
+        }
+
+        if (typeof customIPChecking === "function") {
+            if (customIPChecking(ip) === false) return end();
+        }
+    }
+
     res.upgrade(
         {
             connected: true,
             room,
             username,
+
+            ip,
 
             data: template || {}
         },
