@@ -1,4 +1,16 @@
-const { minUsernameLength, maxUsernameLength, customUsernameChecking, maxPlayers, disableUsernameDupes, saveIPs, ipHeader, disableDupeIPs, customIPChecking, template } = require("../func/tools");
+const {
+    minUsernameLength = 1,
+    maxUsernameLength = 32,
+    customUsernameChecking,
+    maxPlayers = 100,
+    disableUsernameDupes,
+    saveIPs,
+    ipHeader,
+    disableDupeIPs,
+    customIPChecking,
+    template
+} = require("../func/tools");
+
 const rooms = require("../func/rooms");
 
 const generateID = () => Math.random().toString().slice(-8);
@@ -16,8 +28,8 @@ module.exports = async (res, req, context) => {
     if (![1, 2].includes(protocols.length)) return end();
     let [ username, room_id ] = protocols;
 
-    if (username.length < (minUsernameLength || 1)) return end();
-    if (username.length > (maxUsernameLength || 32)) return end();
+    if (username.length < minUsernameLength) return end();
+    if (username.length > maxUsernameLength) return end();
 
     if (typeof customUsernameChecking === "function")
         if (customUsernameChecking(username) === false)

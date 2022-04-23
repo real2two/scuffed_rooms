@@ -23,7 +23,7 @@ require("scuffed-rooms")(PORT, {
     maxUsernameLength: 13,
     
     // The maximum players allowed in a room.
-    maxPlayers: 10,
+    maxPlayers: 10, // default: 100
 
     // The template becomes set to ws.data.
     template: {
@@ -109,7 +109,7 @@ require("scuffed-rooms")(PORT, {
     disableUsernameDupes: true,
     
     // The maximum players allowed in a room.
-    maxPlayers: 10,
+    maxPlayers: 10, // default: 100
 
     // The template becomes set to ws.data.
     template: {
