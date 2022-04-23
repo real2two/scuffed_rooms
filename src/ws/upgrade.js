@@ -13,7 +13,6 @@ const {
 } = require("../func/tools");
 
 const rooms = require("../func/rooms");
-
 const generateID = () => Math.random().toString().slice(-8);
 
 const connected = false;
@@ -29,23 +28,29 @@ module.exports = async (res, req, context) => {
     if (![1, 2].includes(protocols.length)) return end();
     let [ username, room_id ] = protocols;
 
-    if (username.length < minUsernameLength) return end();
-    if (username.length > maxUsernameLength) return end();
+    if (
+        username.length < minUsernameLength ||
+        username.length > maxUsernameLength
+    ) return end();
 
-    if (typeof customUsernameChecking === "function")
-        if (customUsernameChecking(username) === false)
-            return end();
+    if (
+        typeof customUsernameChecking === "function" &&
+        customUsernameChecking(username) === false
+    ) return end();
 
     let room;
 
     if (typeof room_id === "string") {
+        if (room_id in rooms === false) return end();
+
         room = rooms[room_id];
-        if (!room) return end();
         if (room.players >= maxPlayers) return end();
 
-        if (disableUsernameDupes === true)
-            for (const player_username of Object.entries(room.players).map(p => p[1].username))
+        if (disableUsernameDupes === true) {
+            for (const player_username of Object.entries(room.players).map(p => p[1].username)) {
                 if (username === player_username) return end();
+            }
+        }
 
         room.players.push({ connected });
     } else {
@@ -53,7 +58,7 @@ module.exports = async (res, req, context) => {
 
         for (let i = 0; i < 5; i++) {
             room_id = generateID();
-            if (!rooms[room_id]) break;
+            if (room_id in rooms === false) break;
 
             if (i === 4) return end();
         }
@@ -85,9 +90,10 @@ module.exports = async (res, req, context) => {
             }
         }
 
-        if (typeof customIPChecking === "function") {
-            if (customIPChecking(ip) === false) return end();
-        }
+        if (
+            typeof customIPChecking === "function" &&
+            customIPChecking(ip) === false
+        ) return end();
     }
 
     res.upgrade(

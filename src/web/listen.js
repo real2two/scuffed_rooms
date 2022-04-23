@@ -1,4 +1,8 @@
-module.exports = (app, port, { onStart }) => 
+const {
+    onStart
+} = require("../func/tools");
+
+module.exports = (app, port) => {
     app.listen(port, listenSocket => {
         if (listenSocket) {
             if (typeof onStart === "function") {
@@ -10,3 +14,4 @@ module.exports = (app, port, { onStart }) =>
             console.error(`An error has occured while trying to listen the port.`);
         }
     });
+}
