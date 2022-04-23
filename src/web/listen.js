@@ -8,7 +8,7 @@ module.exports = (app, port) => {
             if (typeof onStart === "function") {
                 onStart(port, listenSocket);
             } else {
-                console.log(`The port is listening on ${port}.`);
+                console.log(`The server is listening on port ${port}.`);
             }
         } else {
             console.error(`An error has occured while trying to listen the port.`);
