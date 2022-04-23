@@ -1,8 +1,12 @@
-module.exports = (app, port) => 
+module.exports = (app, port, { onStart }) => 
     app.listen(port, listenSocket => {
         if (listenSocket) {
-            console.log(`[WEB] The port is listening on ${port}.`);
+            if (typeof onStart === "function") {
+                onStart(port, listenSocket);
+            } else {
+                console.log(`The port is listening on ${port}.`);
+            }
         } else {
-            console.log(`[WEB] An error has occured while trying to listen the port.`);
+            console.error(`An error has occured while trying to listen the port.`);
         }
     });

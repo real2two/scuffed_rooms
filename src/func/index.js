@@ -5,6 +5,6 @@ module.exports = (port, tools) => {
 
     require("./tools")(tools);
 
-    require("../web/listen")(app, port);
+    require("../web/listen")(app, port, tools);
     require("../web/ws")(app, tools);
 }
