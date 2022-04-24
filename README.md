@@ -34,7 +34,7 @@ require("scuffed-rooms")(PORT, {
 
     // Connection handler.
     onConnect: ws => {
-        console.log(ws.room.players);
+        console.log(ws);
 
         //ws.send("test");
 
@@ -127,7 +127,7 @@ require("scuffed-rooms")(PORT, {
 
     // Connection handler.
     onConnect: ws => {
-        console.log(ws.room.players);
+        console.log(ws);
 
         //ws.send("test");
         //ws.sendBinary([0]);
