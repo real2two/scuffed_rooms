@@ -4,7 +4,7 @@ const checkUsername = require("../func/usernames");
 const checkIP = require("../func/ips");
 
 const {
-    maxRooms = 100,
+    maxRooms = 1000,
     maxPlayers = 100,
 
     template = {},

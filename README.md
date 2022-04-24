@@ -21,7 +21,7 @@ require("scuffed-rooms")(PORT, {
     // The maximum players allowed in a room.
     maxPlayers: 10, // default: 100
 
-    // Quick join. (when joining the websocket, the "room id" must be set to "q")
+    // Quick join. (when joining the websocket, the "room id" must be set to "q".)
     quickJoin: {
         enabled: true, // default: false (won't work if the maximum rooms is 1.)
         publicByDefault: true // default: true (won't do anything if quickJoin is disabled.)
@@ -44,7 +44,7 @@ require("scuffed-rooms")(PORT, {
 
         //ws.send("test");
 
-        // Get player by ID using: ws.room.getPlayer(id)
+        // Get player by ID using: ws.room.getPlayer(id).
     },
 
     // Message handlers.
@@ -89,10 +89,10 @@ const rooms = require("scuffed-rooms")(PORT, {
 
     // The maximum rooms there can be, and the maximum players are allowed in a room.
     // Keep in mind a single IP address can only handle 65,536 sockets.
-    maxRooms: 100, // default: 100
+    maxRooms: 100, // default: 1000
     maxPlayers: 10, // default: 100
 
-    // Quick join. (when joining the websocket, the "room id" must be set to "q")
+    // Quick join. (when joining the websocket, the "room id" must be set to "q".)
     quickJoin: {
         enabled: true, // default: false (won't work if the maximum rooms is 1.)
         publicByDefault: true // default: true (won't do anything if quickJoin is disabled.)
@@ -106,14 +106,16 @@ const rooms = require("scuffed-rooms")(PORT, {
 
     // IP settings.
     ips: {
-        header: null, // default to none. | ex. "x-forwarded-for" and "cf-connecting-ip"
+        header: null, // default to none. | ex. "x-forwarded-for" and "cf-connecting-ip".
         disableDupes: false, // default to false. This setting disallows having 2 connections with the same IP at once.
         custom: null
         /*
         custom: ip => {
-            // ex of what you can do here: have a file with blocked ips,
-            // and if their ip is there, reject the connection by returning false.
-            // if you like the ip, return true to accept the request.
+            // Here's an idea of what you can do here:
+            // 1. Create a file with blocked ips.
+            // 2. When the server starts, cache the file.
+            // 3a. When someone connects to the server and their ip is in the file, reject the connection by returning false.
+            // 3b. If the ip is not listed in the list of blocked ips, return true to accept the request.
 
             return true;
         }
