@@ -64,7 +64,7 @@ Bigger layout featuring other stuff you can do with the library.
 ```js
 const PORT = 80;
 
-require("scuffed-rooms")(PORT, {
+const rooms = require("scuffed-rooms")(PORT, {
     // Only change if you know what you are doing.
     ws: {
         idleTimeout: 60,

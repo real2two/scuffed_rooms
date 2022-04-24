@@ -14,4 +14,6 @@ module.exports = (port, tools) => {
 
     require("../web/listen")(app, port);
     require("../web/ws")(app, tools);
+
+    return require("./rooms");
 }
