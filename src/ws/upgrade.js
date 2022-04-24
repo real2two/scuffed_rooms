@@ -1,3 +1,5 @@
+const cloneDeep = require('lodash.clonedeep');
+
 const checkUsername = require("../func/usernames");
 const checkIP = require("../func/ips");
 
@@ -5,7 +7,7 @@ const {
     maxRooms = 100,
     maxPlayers = 100,
 
-    template,
+    template = {},
 
     usernames: {
         disableDupes = false
@@ -85,12 +87,12 @@ module.exports = async (res, req, context) => {
     res.upgrade(
         {
             connected: true,
+
             room,
             username,
-
             ip,
 
-            data: template || {}
+            data: cloneDeep(template)
         },
 
         req.getHeader('sec-websocket-key'),
