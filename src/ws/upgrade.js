@@ -30,16 +30,19 @@ module.exports = async (res, req, context) => {
     const protocols = sec_websocket_protocol.split(",").map(p => p.replace(/\s+/g, ' ').trim());
 
     if (![1, 2].includes(protocols.length)) return end();
+    if (maxRooms === 1 && protocols.length === 2) return end();
+
     let [ username, room_id ] = protocols;
 
     if (!checkUsername(username)) return end();
 
+    const rooms_object = Object.entries(rooms);
     let room;
 
+    if (maxRooms === 1 && rooms_object.length === 1) room_id = rooms_object[0][0]; // If max rooms = 1, it sets the room ID to the only room's ID.
+
     if (typeof room_id === "string") {
-        console.log(rooms[room_id])
         if (room_id in rooms === false) return end();
-        console.log("yay")
 
         room = rooms[room_id];
         if (room.players >= maxPlayers) return end();
@@ -52,7 +55,7 @@ module.exports = async (res, req, context) => {
 
         room.players.push({ connected });
     } else {
-        if (Object.entries(rooms).length >= maxRooms) return end();
+        if (rooms_object.length >= maxRooms) return end();
 
         for (let i = 0; i < 5; i++) {
             room_id = generateID();
