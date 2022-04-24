@@ -18,18 +18,18 @@ Simple layout.
 const PORT = 80;
 
 require("scuffed-rooms")(PORT, {
-    // Username settings.
-    username: {
-        min: 3, // default: 1
-        max: 13, // default: 32
-    },
-    
     // The maximum players allowed in a room.
     maxPlayers: 10, // default: 100
 
     // The template becomes set to ws.data.
     template: {
         hello: "world"
+    },
+
+    // Username settings.
+    username: {
+        min: 3, // default: 1
+        max: 13, // default: 32
     },
 
     // Connection handler.
