@@ -21,6 +21,12 @@ require("scuffed-rooms")(PORT, {
     // The maximum players allowed in a room.
     maxPlayers: 10, // default: 100
 
+    // Quick join. (when joining the websocket, the "room id" must be set to "q")
+    quickJoin: {
+        enabled: true, // default: false (won't work if the maximum rooms is 1.)
+        publicByDefault: true // default: true (won't do anything if quickJoin is disabled.)
+    },
+
     // The template becomes set to ws.data.
     template: {
         hello: "world"
@@ -85,6 +91,12 @@ const rooms = require("scuffed-rooms")(PORT, {
     // Keep in mind a single IP address can only handle 65,536 sockets.
     maxRooms: 100, // default: 100
     maxPlayers: 10, // default: 100
+
+    // Quick join. (when joining the websocket, the "room id" must be set to "q")
+    quickJoin: {
+        enabled: true, // default: false (won't work if the maximum rooms is 1.)
+        publicByDefault: true // default: true (won't do anything if quickJoin is disabled.)
+    },
 
     // The template becomes set to ws.data.
     template: {

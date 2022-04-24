@@ -9,6 +9,11 @@ const {
 
     template = {},
 
+    quickJoin: {
+        enabled = false,
+        publicByDefault = true
+    },
+
     usernames: {
         disableDupes = false
     },
@@ -44,36 +49,40 @@ module.exports = async (res, req, context) => {
     if (maxRooms === 1 && rooms_object.length === 1) room_id = rooms_object[0][0]; // If max rooms = 1, it sets the room ID to the only room's ID.
 
     if (typeof room_id === "string") {
-        if (room_id in rooms === false) return end();
+        switch (room_id) {
+            case "q": // Quick join.
+                if (enabled != true) return end();
 
-        room = rooms[room_id];
-        if (room.players >= maxPlayers) return end();
+                const openRooms = [];
+                for (const [ , r ] of rooms_object) {
+                    if (r.public === true && r.players.length < maxPlayers && dupeCheck(r.players)) {
+                        openRooms.push(r);
+                    }
+                }
 
-        if (disableDupes === true) { // Disallow duplicate usernames.
-            for (const player_username of Object.entries(room.players).map(p => p[1].username)) {
-                if (username === player_username) return end();
-            }
+                if (openRooms.length === 0) { // Create room since no open public rooms were found.
+                    if (!createRoom(true)) return end();
+                } else { // Join available public room.
+                    room = openRooms[Math.floor(Math.random() * openRooms.length)];
+                    room.players.push({ connected });
+                }
+
+                break;
+
+            default: // Join a room with provided room ID.
+                if (room_id in rooms === false) return end();
+
+                room = rooms[room_id];
+                if (room.players.length >= maxPlayers) return end();
+
+                if (!dupeCheck(players)) return end();
+        
+                room.players.push({ connected });
+
+                break;
         }
-
-        room.players.push({ connected });
     } else {
-        if (rooms_object.length >= maxRooms) return end();
-
-        for (let i = 0; i < 5; i++) {
-            room_id = generateID();
-            if (room_id in rooms === false) break;
-
-            if (i === 4) return end();
-        }
-
-        room = {
-            aborted: false,
-            
-            id: room_id,
-            players: [{ connected }],
-            getPlayer: id => room.players.filter(p => p.id == id)[0]
-        }
-        rooms[room_id] = room;
+        if (!createRoom()) return end();
     }
 
     const ip = (
@@ -101,4 +110,41 @@ module.exports = async (res, req, context) => {
 
         context
     );
+
+    function createRoom(public = publicByDefault) {
+        if (rooms_object.length >= maxRooms) return false;
+
+        for (let i = 0; i < 5; i++) {
+            room_id = generateID();
+            if (room_id in rooms === false) break;
+
+            if (i === 4) return false;
+        }
+
+        room = {
+            aborted: false,
+            
+            id: room_id,
+            public,
+            players: [{ connected }],
+            getPlayer: id => {
+                for (const player of room.players) {
+                    if (player.id === id) return player;
+                }
+            }
+        }
+        rooms[room_id] = room;
+
+        return room;
+    }
+
+    function dupeCheck(players) {
+        if (disableDupes === true) { // Disallow duplicate usernames.
+            for (const playerUsername of players.map(p => p.username)) {
+                if (username === playerUsername) return false;
+            }
+        }
+        
+        return true;
+    }
 }

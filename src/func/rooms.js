@@ -9,7 +9,7 @@ setInterval(() => {
             if (typeof unexpectedRoomDeletion === "function") unexpectedRoomDeletion("exceeds_rooms", room);
 
             room.aborted = true;
-            for (const { close } of room.players) close();
+            for (const player of room.players) player.close();
         }
     }
 
@@ -22,7 +22,7 @@ setInterval(() => {
         }
 
         if (room.players.length > maxPlayers) {
-            for (const { close } of room.players.slice(maxPlayers)) close();
+            for (const player of room.players.slice(maxPlayers)) player.close();
         }
     }
 }, 5000);

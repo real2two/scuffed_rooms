@@ -7,6 +7,7 @@ module.exports = (port, tools) => {
         ws: {},
         usernames: {},
         ips: {},
+        quickJoin: {},
 
         ...tools
     };
