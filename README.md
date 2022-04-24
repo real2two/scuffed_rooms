@@ -19,8 +19,10 @@ const PORT = 80;
 
 require("scuffed-rooms")(PORT, {
     // Username settings.
-    minUsernameLength: 3,
-    maxUsernameLength: 13,
+    username: {
+        min: 3, // default: 1
+        max: 13, // default: 32
+    },
     
     // The maximum players allowed in a room.
     maxPlayers: 10, // default: 100
@@ -78,36 +80,7 @@ require("scuffed-rooms")(PORT, {
     },
     */
 
-    // IP settings.
-    saveIPs: true, // default to true.
-    ipHeader: null, // default to none. | ex. "x-forwarded-for" and "cf-connecting-ip"
-    disableDupeIPs: false, // default to false. This setting disallows having 2 connections with the same IP at once.
-    customIPChecking: null,
-    /*
-    customIPChecking: ip => {
-        // ex of what you can do here: have a file with blocked ips,
-        // and if their ip is there, reject the connection by returning false.
-        // if you like the ip, return true to accept the request.
 
-        return true;
-    },
-    */
-
-    
-    // Username settings.
-    minUsernameLength: 3, // default: 1
-    maxUsernameLength: 13, // default: 32
-    customUsernameChecking: null,
-    /*
-    customUsernameChecking: username => { // Return "true" to allow the username. Return "false" to end the upgrade request.
-        // The example below shows that the server only accepts usernames with numbers, letters, and undercases.
-        
-        if (username.replace(/[0-9a-zA-Z_]/g, "").length > 0) return false;
-        return true;
-    },
-    */
-    disableUsernameDupes: true,
-    
     // The maximum rooms there can be, and the maximum players are allowed in a room.
     // Keep in mind a single IP address can only handle 65,536 sockets.
     maxRooms: 100, // default: 100
@@ -117,6 +90,40 @@ require("scuffed-rooms")(PORT, {
     template: {
         hello: "world"
     },
+
+
+    // IP settings.
+    ips: {
+        header: null, // default to none. | ex. "x-forwarded-for" and "cf-connecting-ip"
+        disableDupes: false, // default to false. This setting disallows having 2 connections with the same IP at once.
+        custom: null
+        /*
+        custom: ip => {
+            // ex of what you can do here: have a file with blocked ips,
+            // and if their ip is there, reject the connection by returning false.
+            // if you like the ip, return true to accept the request.
+
+            return true;
+        }
+        */
+    },
+
+    // Username settings.
+    username: {
+        min: 3, // default: 1
+        max: 13, // default: 32
+        custom: null
+        /*
+        custom: username => { // Return "true" to allow the username. Return "false" to end the upgrade request.
+            // The example below shows that the server only accepts usernames with numbers, letters, and undercases.
+
+            if (username.replace(/[0-9a-zA-Z_]/g, "").length > 0) return false;
+            return true;
+        }
+        */
+        disableDupes: false // default: false
+    },
+
 
     // Connection handler.
     onConnect: ws => {

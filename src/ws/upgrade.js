@@ -1,15 +1,19 @@
+const checkUsername = require("../func/usernames");
+const checkIP = require("../func/ips");
+
 const {
-    minUsernameLength = 1,
-    maxUsernameLength = 32,
-    customUsernameChecking,
     maxRooms = 100,
     maxPlayers = 100,
-    disableUsernameDupes,
-    saveIPs,
-    ipHeader,
-    disableDupeIPs,
-    customIPChecking,
-    template
+
+    template,
+
+    usernames: {
+        disableDupes = false
+    },
+
+    ips: {
+        header
+    }
 } = require("../func/tools");
 
 const rooms = require("../func/rooms");
@@ -28,25 +32,19 @@ module.exports = async (res, req, context) => {
     if (![1, 2].includes(protocols.length)) return end();
     let [ username, room_id ] = protocols;
 
-    if (
-        username.length < minUsernameLength ||
-        username.length > maxUsernameLength
-    ) return end();
-
-    if (
-        typeof customUsernameChecking === "function" &&
-        customUsernameChecking(username) === false
-    ) return end();
+    if (!checkUsername(username)) return end();
 
     let room;
 
     if (typeof room_id === "string") {
+        console.log(rooms[room_id])
         if (room_id in rooms === false) return end();
+        console.log("yay")
 
         room = rooms[room_id];
         if (room.players >= maxPlayers) return end();
 
-        if (disableUsernameDupes === true) {
+        if (disableDupes === true) { // Disallow duplicate usernames.
             for (const player_username of Object.entries(room.players).map(p => p[1].username)) {
                 if (username === player_username) return end();
             }
@@ -73,28 +71,13 @@ module.exports = async (res, req, context) => {
         rooms[room_id] = room;
     }
 
-    let ip;
-    
-    if (saveIPs != false) {
-        ip = (
-            ipHeader ?
-            req.getHeader(ipHeader) :
-            undefined
-        ) || new TextDecoder().decode(res.getRemoteAddressAsText());
+    const ip = (
+        header ?
+        req.getHeader(header) :
+        undefined
+    ) || new TextDecoder().decode(res.getRemoteAddressAsText());
 
-        if (disableDupeIPs === true) {
-            for (const [ , { players } ] of Object.entries(rooms)) {
-                for (const player of players) {
-                    if (player.ip == ip) return end();
-                }
-            }
-        }
-
-        if (
-            typeof customIPChecking === "function" &&
-            customIPChecking(ip) === false
-        ) return end();
-    }
+    if (!checkIP(ip)) return end();
 
     res.upgrade(
         {

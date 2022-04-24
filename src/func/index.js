@@ -3,7 +3,13 @@ const app = require('uWebSockets.js').App();
 module.exports = (port, tools) => {
     module.exports = null;
 
-    if (!('ws' in tools)) tools.ws = {};
+    tools = {
+        ws: {},
+        usernames: {},
+        ips: {},
+
+        ...tools
+    };
     require("./tools")(tools);
 
     require("../web/listen")(app, port);
