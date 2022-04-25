@@ -6,7 +6,7 @@ module.exports = (app, port) => {
     app.listen(port, listenSocket => {
         if (listenSocket) {
             if (typeof onStart === "function") {
-                onStart(port, listenSocket);
+                onStart(port, app);
             } else {
                 console.log(`The server is listening on port ${port}.`);
             }

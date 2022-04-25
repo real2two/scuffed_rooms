@@ -90,8 +90,12 @@ const rooms = require("scuffed-rooms")(PORT, {
     // Start up custom function.
     onStart: null,
     /*
-    onStart: (port, listenSocket) => { // Don't touch "listenSocket" unless you know what you're doing.
+    onStart: (port, app) => { // Don't touch "app" unless you know what you're doing.
         console.log(port);
+
+        app.get('/*', (res, req) => {
+            res.writeStatus('200 OK').end('Hello world!');
+        })
     },
     */
 
