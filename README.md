@@ -8,7 +8,11 @@ If you find this library useful and actually want me to add stuff to do, make a 
 
 ## Setup
 
-Run `npm i scuffed-rooms` to download the library. 
+Run `npm i scuffed-rooms` to download the library.
+
+## Examples
+
+Examples are listed in the "examples" folder.
 
 ## Template
 
@@ -29,7 +33,12 @@ require("scuffed-rooms")(PORT, {
 
     // The template becomes set to ws.data.
     template: {
-        hello: "world"
+        room: {
+            hello: "world"
+        },
+        player: {
+            hello: "world"
+        }
     },
 
     // Username settings.
@@ -100,7 +109,12 @@ const rooms = require("scuffed-rooms")(PORT, {
 
     // The template becomes set to ws.data.
     template: {
-        hello: "world"
+        room: {
+            hello: "world"
+        },
+        player: {
+            hello: "world"
+        }
     },
 
 
@@ -171,3 +185,7 @@ const rooms = require("scuffed-rooms")(PORT, {
     }
 });
 ```
+
+## Note
+
+For HTML developers: You need to add `<ws>.binaryType = "arraybuffer";` to receive binary messages.

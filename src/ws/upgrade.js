@@ -7,7 +7,7 @@ const {
     maxRooms = 1000,
     maxPlayers = 100,
 
-    template = {},
+    template,
 
     quickJoin: {
         enabled = false,
@@ -51,11 +51,11 @@ module.exports = async (res, req, context) => {
     if (typeof room_id === "string") {
         switch (room_id) {
             case "q": // Quick join.
-                if (enabled != true) return end();
+                if (enabled !== true) return end();
 
                 const openRooms = [];
                 for (const [ , r ] of rooms_object) {
-                    if (r.public === true && r.players.length < maxPlayers && dupeCheck(r.players)) {
+                    if (r.public === true && r.players.length !== 0 && r.players.length < maxPlayers && dupeCheck(r.players)) {
                         openRooms.push(r);
                     }
                 }
@@ -73,9 +73,11 @@ module.exports = async (res, req, context) => {
                 if (room_id in rooms === false) return end();
 
                 room = rooms[room_id];
+                
+                if (room.players.length === 0) return end();
                 if (room.players.length >= maxPlayers) return end();
 
-                if (!dupeCheck(players)) return end();
+                if (!dupeCheck(room.players)) return end();
         
                 room.players.push({ connected });
 
@@ -101,7 +103,7 @@ module.exports = async (res, req, context) => {
             username,
             ip,
 
-            data: cloneDeep(template)
+            data: cloneDeep(template.player || {})
         },
 
         req.getHeader('sec-websocket-key'),
@@ -126,6 +128,9 @@ module.exports = async (res, req, context) => {
             
             id: room_id,
             public,
+
+            data: cloneDeep(template.room || {}),
+
             players: [{ connected }],
             getPlayer: id => {
                 for (const player of room.players) {
