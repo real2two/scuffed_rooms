@@ -31,7 +31,7 @@ require("scuffed-rooms")(PORT, {
         publicByDefault: true // default: true (won't do anything if quickJoin is disabled.)
     },
 
-    // The template becomes set to ws.data.
+    // The template becomes set to <room>.data for rooms, and <ws>.data for players.
     template: {
         room: {
             hello: "world"
@@ -107,7 +107,7 @@ const rooms = require("scuffed-rooms")(PORT, {
         publicByDefault: true // default: true (won't do anything if quickJoin is disabled.)
     },
 
-    // The template becomes set to ws.data.
+    // The template becomes set to <room>.data for rooms, and <ws>.data for players.
     template: {
         room: {
             hello: "world"
