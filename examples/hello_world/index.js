@@ -32,7 +32,7 @@ scuffed_rooms(PORT, {
                     });
                 }
 
-                for (const player of ws.room.players) player.send(JSON.stringify(sendPos.filter(p => p.u !== player.username)));
+                ws.broadcast(JSON.stringify(sendPos));
             }, 15);
         }
     },

@@ -12,6 +12,8 @@ function draw() {
     pop();
 
     for (const { u, x, y } of otherPlayers) {
+        if (u === username.value) continue;
+        
         scalePush();
         translate(x, y);
         textAlign(CENTER);

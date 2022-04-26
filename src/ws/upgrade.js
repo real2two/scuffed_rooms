@@ -103,6 +103,9 @@ module.exports = async (res, req, context) => {
             username,
             ip,
 
+            broadcast: room.broadcast,
+            broadcastBinary: room.broadcastBinary,
+
             data: cloneDeep(template.player || {})
         },
 
@@ -136,6 +139,13 @@ module.exports = async (res, req, context) => {
                 for (const player of room.players) {
                     if (player.id === id) return player;
                 }
+            },
+
+            broadcast: (message, isBinary) => {
+                for (const player of room.players) player.send(message, isBinary, true);
+            },
+            broadcastBinary: (message) => {
+                for (const player of room.players) player.send(message, true, true);
             }
         }
         rooms[room_id] = room;
