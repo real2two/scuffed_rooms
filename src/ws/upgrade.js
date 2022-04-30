@@ -127,7 +127,7 @@ module.exports = async (res, req, context) => {
         }
 
         room = {
-            aborted: false,
+            removed: false,
             
             id: room_id,
             public,

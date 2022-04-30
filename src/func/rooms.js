@@ -4,18 +4,19 @@ setInterval(() => {
     const check_rooms = Object.entries(module.exports);
     if (check_rooms.length >= maxRooms) {
         for (const [ , room ] of check_rooms.slice(maxRooms)) {
+            room.removed = true;
             delete module.exports[room.id];
 
             if (typeof unexpectedRoomDeletion === "function") unexpectedRoomDeletion("exceeds_rooms", room);
-
-            room.aborted = true;
             for (const player of room.players) player.close();
         }
     }
 
     for (const [ , room ] of Object.entries(module.exports)) {
         if (room.players.length === 0) {
+            room.removed = true;
             delete module.exports[room.id];
+
             if (typeof unexpectedRoomDeletion === "function") unexpectedRoomDeletion("no_players", room);
             
             continue;
