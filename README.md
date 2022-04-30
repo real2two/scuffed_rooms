@@ -144,7 +144,7 @@ const rooms = require("scuffed-rooms")(PORT, {
     username: {
         min: 3, // default: 1
         max: 13, // default: 32
-        custom: null
+        custom: null,
         /*
         custom: username => { // Return "true" to allow the username. Return "false" to end the upgrade request.
             // The example below shows that the server only accepts usernames with numbers, letters, and undercases.
