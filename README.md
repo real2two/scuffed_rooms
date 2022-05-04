@@ -42,7 +42,7 @@ require("scuffed-rooms")(PORT, {
     },
 
     // Username settings.
-    username: {
+    usernames: {
         min: 3, // default: 1
         max: 13, // default: 32
     },
@@ -141,7 +141,7 @@ const rooms = require("scuffed-rooms")(PORT, {
     },
 
     // Username settings.
-    username: {
+    usernames: {
         min: 3, // default: 1
         max: 13, // default: 32
         custom: null,
@@ -153,7 +153,7 @@ const rooms = require("scuffed-rooms")(PORT, {
             return true;
         }
         */
-        disableDupes: false // default: false
+        disableDupes: 0 // default: 0 | 0 = false. 1 = true. 2 = rename.
     },
 
 

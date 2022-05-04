@@ -1,5 +1,5 @@
 const PORT = 80;
-const scuffed_rooms = require("scuffed-rooms"); // require("../../src/func");
+const scuffed_rooms = require("../../src/func");//  require("scuffed-rooms"); //
 
 scuffed_rooms(PORT, {
     maxRooms: 1,
@@ -14,9 +14,10 @@ scuffed_rooms(PORT, {
         }
     },
 
-    username: {
+    usernames: {
         min: 1,
         max: 13,
+        disableDupes: 2
     },
 
     onConnect: ws => {

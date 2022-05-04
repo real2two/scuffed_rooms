@@ -15,7 +15,7 @@ const {
     },
 
     usernames: {
-        disableDupes = false
+        disableDupes = 0
     },
 
     ips: {
@@ -41,6 +41,12 @@ module.exports = async (res, req, context) => {
 
     let [ username, room_id ] = protocols;
 
+    try {
+        username = decodeURIComponent(username);
+    } catch(e) {
+        return end();
+    }
+
     if (!checkUsername(username)) return end();
 
     const rooms_object = Object.entries(rooms);
@@ -55,7 +61,7 @@ module.exports = async (res, req, context) => {
 
                 const openRooms = [];
                 for (const [ , r ] of rooms_object) {
-                    if (r.public === true && r.players.length !== 0 && r.players.length < maxPlayers && dupeCheck(r.players)) {
+                    if (r.public === true && r.players.length !== 0 && r.players.length < maxPlayers && (disableDupes === 2 || dupeCheck(r.players) === true)) {
                         openRooms.push(r);
                     }
                 }
@@ -64,6 +70,11 @@ module.exports = async (res, req, context) => {
                     if (!createRoom(true)) return end();
                 } else { // Join available public room.
                     room = openRooms[Math.floor(Math.random() * openRooms.length)];
+
+                    if (disableDupes === 2 && dupeCheck(room.players) === false) {
+                        makeUsernameUnique();
+                    }
+
                     room.players.push({ connected });
                 }
 
@@ -77,7 +88,13 @@ module.exports = async (res, req, context) => {
                 if (room.players.length === 0) return end();
                 if (room.players.length >= maxPlayers) return end();
 
-                if (!dupeCheck(room.players)) return end();
+                if (dupeCheck(room.players) === false) {
+                    if (disableDupes === 1) return end();
+
+                    if (disableDupes === 2) {
+                        makeUsernameUnique();
+                    }
+                }
         
                 room.players.push({ connected });
 
@@ -154,12 +171,19 @@ module.exports = async (res, req, context) => {
     }
 
     function dupeCheck(players) {
-        if (disableDupes === true) { // Disallow duplicate usernames.
+        if ([1, 2].includes(disableDupes)) { // Disallow duplicate usernames.
             for (const playerUsername of players.map(p => p.username)) {
                 if (username === playerUsername) return false;
             }
         }
         
         return true;
+    }
+
+    function makeUsernameUnique() {
+        const oldUsername = username;
+        for (let x = 2; room.players.filter(p => p.username === username).length !== 0; x++) {
+            username = oldUsername + x;
+        }
     }
 }

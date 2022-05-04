@@ -10,7 +10,7 @@ function connect() {
 
     joinRoom.style.display = "none";
 
-    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${SERVER}`, [ username.value ]);
+    ws = new WebSocket(`ws${document.location.protocol == "https:" ? "s" : ""}://${SERVER}`, [ encodeURIComponent(username.value) ]);
 
     let connected = false;
 

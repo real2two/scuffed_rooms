@@ -1,6 +1,6 @@
 {
   "name": "scuffed-rooms",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A easy-to-use library that is used to quickly create multiplayer games with a 'room-based' system.",
   "author": "Two",
   "main": "src/func/index.js",
