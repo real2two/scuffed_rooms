@@ -11,7 +11,7 @@ module.exports = ip => {
     if (disableDupes === true) {
         for (const [ , { players } ] of Object.entries(rooms)) {
             for (const player of players) {
-                if (player.ip == ip) return false;
+                if (player.ip === ip) return false;
             }
         }
     }

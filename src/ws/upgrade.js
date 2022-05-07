@@ -121,6 +121,7 @@ module.exports = async (res, req, context) => {
             ip,
 
             broadcast: room.broadcast,
+            broadcastJSON: room.broadcastJSON,
             broadcastBinary: room.broadcastBinary,
 
             data: cloneDeep(template.player || {})
@@ -136,7 +137,7 @@ module.exports = async (res, req, context) => {
     function createRoom(public = publicByDefault) {
         if (rooms_object.length >= maxRooms) return false;
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; ++i) {
             room_id = generateID();
             if (room_id in rooms === false) break;
 
@@ -161,6 +162,11 @@ module.exports = async (res, req, context) => {
             broadcast: (message, isBinary) => {
                 for (const player of room.players) player.send(message, isBinary, true);
             },
+
+            broadcastJSON: message => {
+                for (const player of room.players) player.send(JSON.stringify(message));
+            },
+
             broadcastBinary: (message) => {
                 for (const player of room.players) player.send(message, true, true);
             }
@@ -182,7 +188,7 @@ module.exports = async (res, req, context) => {
 
     function makeUsernameUnique() {
         const oldUsername = username;
-        for (let x = 2; room.players.filter(p => p.username === username).length !== 0; x++) {
+        for (let x = 2; room.players.filter(p => p.username === username).length !== 0; ++x) {
             username = oldUsername + x;
         }
     }

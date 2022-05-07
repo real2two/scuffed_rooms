@@ -2,7 +2,7 @@ const nextID = room => {
     const ids = room.players.map(user => user.id);
 
     let id = 0;
-    while (ids.includes(id)) id++;
+    while (ids.includes(id)) ++id;
     
     return id;
 }
@@ -10,6 +10,7 @@ const nextID = room => {
 const { onConnect } = require("../func/tools");
 
 module.exports = async ws => {
+    ws.sendJSON = value => ws.send(JSON.stringify(value));
     ws.sendBinary = value => ws.send(new Uint8Array(value), true, true);
 
     ws.id = nextID(ws.room);

@@ -1,5 +1,5 @@
 const PORT = 80;
-const scuffed_rooms = require("../../src/func");//  require("scuffed-rooms"); //
+const scuffed_rooms = require("scuffed-rooms"); // require("../../src/func");
 
 scuffed_rooms(PORT, {
     maxRooms: 1,
@@ -33,7 +33,7 @@ scuffed_rooms(PORT, {
                     });
                 }
 
-                ws.broadcast(JSON.stringify(sendPos));
+                ws.broadcastJSON(sendPos);
             }, 15);
         }
     },
