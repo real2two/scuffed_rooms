@@ -1,12 +1,12 @@
 {
   "name": "scuffed-rooms",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "A easy-to-use library that is used to quickly create multiplayer games with a 'room-based' system.",
   "author": "Two",
   "main": "src/func/index.js",
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
-    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.3.0"
+    "uWebSockets.js": "uNetworking/uWebSockets.js#v20.3.0"
   },
   "repository": {
     "type": "git",

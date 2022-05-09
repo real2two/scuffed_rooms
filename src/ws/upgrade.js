@@ -4,6 +4,8 @@ const checkUsername = require("../func/usernames");
 const checkIP = require("../func/ips");
 
 const {
+    idLength = 8,
+
     maxRooms = 1000,
     maxPlayers = 100,
 
@@ -24,7 +26,15 @@ const {
 } = require("../func/tools");
 
 const rooms = require("../func/rooms");
-const generateID = () => Math.random().toString().slice(-8);
+
+const generateID = () => {
+    let result = '';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < idLength; ++i) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+   }
+   return result;
+}
 
 const connected = false;
 

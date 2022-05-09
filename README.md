@@ -105,6 +105,9 @@ const rooms = require("scuffed-rooms")(PORT, {
     maxRooms: 100, // default: 1000
     maxPlayers: 10, // default: 100
 
+    // Set the room ID length.
+    idLength: 8, // default: 8
+
     // Quick join. (when joining the websocket, the "room id" must be set to "q".)
     quickJoin: {
         enabled: true, // default: false (won't work if the maximum rooms is 1.)
