@@ -217,7 +217,7 @@ var server = "localhost";
 // Content sent to the server while connecting. (sec-websocket-protocol)
 
 var joinData = [
-	encodeURIComponent(username.value),
+	encodeURIComponent("username"),
 	"roomID" // "q" = quick join | <room id> = join room | undefined = create room
 ];
 
