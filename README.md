@@ -14,7 +14,7 @@ Run `npm i scuffed-rooms` to download the library.
 
 Examples are listed in the "examples" folder.
 
-## Template
+## Server Template
 
 Simple layout.
 
@@ -204,6 +204,71 @@ const rooms = require("scuffed-rooms")(PORT, {
 });
 ```
 
-## Note
+## Client Template
 
-For HTML developers: You need to add `<ws>.binaryType = "arraybuffer";` to receive binary messages.
+Here's a basic template you can use! (untested)
+
+```js
+// Connection relating details.
+
+var isWss = document.location.protocol == "https:" ? "s" : "";
+var server = "localhost";
+
+// Content sent to the server while connecting. (sec-websocket-protocol)
+
+var joinData = [
+	encodeURIComponent(username.value),
+	"roomID" // "q" = quick join | <room id> = join room | undefined = create room
+];
+
+// Create the websocket.
+
+var ws = new WebSocket(`ws${wss}://${server}`, joinData);
+ws.binaryType = "arraybuffer";
+
+// Websocket connected handler.
+
+var connected = false;
+
+ws.onopen = () => {
+    connected = true;
+
+    ws.onmessage = ({ data }) => { // Receive data here.
+        if (typeof data === "string") {
+            console.log(data); // Logs any non-binary messages sent from the server.
+        } else {
+            const recieved = [ ...new Uint8Array(data) ]; // Gets binary data content.
+            console.log(recieved); // Logs any binary messages sent from the server.
+        }
+    }
+}
+
+// Websocket close handlers.
+
+ws.onclose = () => {
+    disconnected();
+};
+
+ws.onerror = evt => {
+    console.log(evt); // Logs error.
+
+    ws.close();
+    disconnected();
+}
+
+function disconnected() {
+    if (connected) {
+        console.log("Disconnect from websocket.");
+    } else {
+        console.log("Could not join websocket.");
+    }
+}
+```
+
+### Note
+
+I highly recommend *not* using `var`, because global variables tend to cause issues.
+
+`const` and `let` are usually better in most cases.
+
+In my personal opinion, `var` is useful while teaching Javascript and good for debugging (if you're too lazy to use an actual debugger).
