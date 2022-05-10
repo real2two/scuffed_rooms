@@ -4,6 +4,9 @@ const checkUsername = require("../func/usernames");
 const checkIP = require("../func/ips");
 
 const {
+    extraProtocols = 0,
+    protocolPreJoin,
+
     idLength = 8,
 
     maxRooms = 1000,
@@ -41,15 +44,37 @@ const connected = false;
 module.exports = async (res, req, context) => {
     const end = () => res.writeStatus('400').end();
 
+    // IP check.
+
+    const ip = (
+        header ?
+        req.getHeader(header) :
+        undefined
+    ) || new TextDecoder().decode(res.getRemoteAddressAsText());
+
+    if (!checkIP(ip)) return end();
+
+    // Arguments
+
     const sec_websocket_protocol = req.getHeader('sec-websocket-protocol');
     
     if (!sec_websocket_protocol) return end();
-    const protocols = sec_websocket_protocol.split(",").map(p => p.replace(/\s+/g, ' ').trim());
+    let protocols = sec_websocket_protocol.split(",").map(p => p.replace(/\s+/g, ' ').trim());
 
-    if (![1, 2].includes(protocols.length)) return end();
+    if (![1 + extraProtocols, 2 + extraProtocols].includes(protocols.length)) return end();
+
+    if (
+        typeof protocolPreJoin === "function" &&
+        protocolPreJoin(cloneDeep(protocols).slice(0, extraProtocols)) === false
+    ) return end();
+
+    protocols = protocols.slice(extraProtocols);
+
     if (maxRooms === 1 && protocols.length === 2) return end();
 
     let [ username, room_id ] = protocols;
+
+    // Usernames.
 
     try {
         username = decodeURIComponent(username);
@@ -58,6 +83,8 @@ module.exports = async (res, req, context) => {
     }
 
     if (!checkUsername(username)) return end();
+
+    // Rooms.
 
     const rooms_object = Object.entries(rooms);
     let room;
@@ -113,14 +140,6 @@ module.exports = async (res, req, context) => {
     } else {
         if (!createRoom()) return end();
     }
-
-    const ip = (
-        header ?
-        req.getHeader(header) :
-        undefined
-    ) || new TextDecoder().decode(res.getRemoteAddressAsText());
-
-    if (!checkIP(ip)) return end();
 
     res.upgrade(
         {

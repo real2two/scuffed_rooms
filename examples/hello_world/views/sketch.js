@@ -1,5 +1,5 @@
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(500, 500);
 }
 
 function draw() {
@@ -7,30 +7,27 @@ function draw() {
 
     background(220);
 
-    scalePush();
+    push();
+    translateToMiddle();
     square(0, 0, boxSize);
     pop();
 
     for (const { u, x, y } of otherPlayers) {
-        scalePush();
+        push();
+        
+        translateToMiddle(x, y);
         translate(x, y);
+
         textAlign(CENTER);
         text(u, 12.5, -5);
+
         fill("gray");
         square(0, 0, boxSize);
         pop();
     }
-
-    /*
-    scalePush();
-    translate(player.x, player.y);
-    textAlign(CENTER);
-    fill("gray");
-    square(0, 0, boxSize);
-    pop();
-    */
 }
 
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+function translateToMiddle() {
+    translate(250 - player.x, 250 - player.y);
+    translate(boxSize / 2, boxSize / 2);
 }

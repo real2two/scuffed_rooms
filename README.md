@@ -158,7 +158,18 @@ const rooms = require("scuffed-rooms")(PORT, {
         */
         disableDupes: 0 // default: 0 | 0 = false. 1 = true. 2 = rename.
     },
+    
+    // Pre-join connection handler for protocols.
+    extraProtocols: 1, // Amount of extra protocols used.
+    protocolPreJoin: protocols => { // Handle the protocols.
+        const extra = protocols.shift();
 
+        if (extra === "test") { // If the first argument of the protocol is "test", disallow the connection from continuing.
+            return false;
+        } else { // Let the user join.
+            return true;
+        }
+    },
 
     // Connection handler.
     onConnect: ws => {

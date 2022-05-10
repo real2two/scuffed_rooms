@@ -1,10 +1,11 @@
 const SERVER = "localhost";
 
-const scaleWidth = 1280;
-const scaleHeight = 720;
-const canvasScale = () => Math.min(windowWidth / scaleWidth, windowHeight / scaleHeight);
+const canvasSize = {
+    width: 1024,
+    height: 720
+}
 
-let player = {
+const player = {
     x: 0,
     y: 0
 }
