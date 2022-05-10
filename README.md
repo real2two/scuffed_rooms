@@ -211,7 +211,7 @@ Here's a basic template you can use! (untested)
 ```js
 // Connection relating details.
 
-var isWss = document.location.protocol == "https:" ? "s" : "";
+var isWss = document.location.protocol === "https:" ? "s" : "";
 var server = "localhost";
 
 // Content sent to the server while connecting. (sec-websocket-protocol)
@@ -257,7 +257,7 @@ ws.onerror = evt => {
 }
 
 function disconnected() {
-    if (connected) {
+    if (connected === true) {
         console.log("Disconnect from websocket.");
     } else {
         console.log("Could not join websocket.");
@@ -267,8 +267,21 @@ function disconnected() {
 
 ### Note
 
-I highly recommend *not* using `var`, because global variables tend to cause issues.
+##### 1. I highly recommend *not* using `var`, because global variables tend to cause issues.
 
 `const` and `let` are usually better in most cases.
 
+##### 2. I purposely used `var`.
+
 In my personal opinion, `var` is useful while teaching Javascript and good for debugging (if you're too lazy to use an actual debugger).
+
+##### 3. I know the code can be simplified more.
+
+I tried to make the code as easily readable as possible.
+
+For example, the code below can be simplified into `ws.onclose = disconnected;`.
+```js
+ws.onclose = () => {
+    disconnected();
+};
+```
