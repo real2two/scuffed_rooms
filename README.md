@@ -99,6 +99,10 @@ const rooms = require("scuffed-rooms")(PORT, {
     },
     */
 
+   
+    // Allowed origin. (CORS)
+    allowedOrigin: "*", // This should be a domain. "*" means any origin is allowed.
+
 
     // The maximum rooms there can be, and the maximum players are allowed in a room.
     // Keep in mind a single IP address can only handle 65,536 sockets.

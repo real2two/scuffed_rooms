@@ -4,6 +4,8 @@ const checkUsername = require("../func/usernames");
 const checkIP = require("../func/ips");
 
 const {
+    allowedOrigin = "*",
+
     extraProtocols = 0,
     protocolPreJoin,
 
@@ -43,6 +45,18 @@ const connected = false;
 
 module.exports = async (res, req, context) => {
     const end = () => res.writeStatus('400').end();
+
+    if (allowedOrigin !== "*") {
+        const origin = req.getHeader('origin');
+        if (allowedOrigin !== origin) return end();
+
+        /*
+            I tried using headers but it didn't work.
+            
+            res.writeHeader("Access-Control-Allow-Origin", allowedOrigin);
+            res.writeHeader("Access-Control-Allow-Methods", "OPTIONS");
+        */
+    }
 
     // IP check.
 
