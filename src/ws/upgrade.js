@@ -48,7 +48,7 @@ module.exports = async (res, req, context) => {
 
     if (allowedOrigin !== "*") {
         const origin = req.getHeader('origin');
-        if (allowedOrigin !== origin) return end();
+        if (origin.length !== 0 && allowedOrigin !== origin) return end();
 
         /*
             I tried using headers but it didn't work.
