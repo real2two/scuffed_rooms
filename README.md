@@ -1,3 +1,9 @@
+# Deprecation note.
+
+I discontinued this library because I absolutely rushed making this and I would need to rewrite the whole library to make it easily scalable.
+
+---
+
 # Scuffed Rooms.
 
 A easy-to-use library that is used to quickly create multiplayer games with a 'room-based' system.
